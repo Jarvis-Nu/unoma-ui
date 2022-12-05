@@ -1,0 +1,34 @@
+{
+  "name": "unoma",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.4",
+    "@rainbow-me/rainbowkit": "^0.7.1",
+    "ethers": "^5.7.2",
+    "next": "12.2.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recoil": "^0.7.6",
+    "tailwind-scrollbar": "^2.0.1",
+    "wagmi": "^0.6.8"
+  },
+  "devDependencies": {
+    "@heroicons/react": "^1.0.6",
+    "@types/node": "18.7.14",
+    "@types/react": "18.0.18",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.12",
+    "eslint": "8.23.0",
+    "eslint-config-next": "12.2.5",
+    "postcss": "^8.4.18",
+    "tailwindcss": "^3.2.1",
+    "typescript": "4.8.2"
+  }
+}
