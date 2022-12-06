@@ -17,6 +17,9 @@ module.exports = {
       },
       borderColor: {
         "purple": "#4E5275"
+      },
+      ringColor: {
+        "blue": "#008BEE",
       }
     },
     fontFamily: {

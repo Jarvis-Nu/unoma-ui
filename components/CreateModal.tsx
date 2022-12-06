@@ -4,12 +4,14 @@ import { PhotographIcon } from '@heroicons/react/solid'
 import { useRecoilState } from "recoil"
 import { modalState } from "../atoms/modalAtom"
 
-export default function AddModal() {
+export default function CreateModal() {
   const [open, setOpen] = useRecoilState(modalState)
   const cancelButtonRef = useRef(null)
-  const filePickerRef: any = useRef(null)
-    const [thumbnail, setThumbnail] = useState<{thumbnail: string}>({thumbnail: ""})
-    function displayThumbnail(e: any) {
+  const podcastFilePickerRef: any = useRef(null)
+  const podcasterFilePickerRef: any = useRef(null)
+  const [podcastThumbnail, setPodcastThumbnail] = useState<{thumbnail: string}>({thumbnail: ""})
+  const [podcasterThumbnail, setPodcasterThumbnail] = useState<{thumbnail: string}>({thumbnail: ""})
+    function displayPodcastThumbnail(e: any) {
         const reader = new FileReader()
         let type = e.target.files[0].type
         if (e.target.files[0]) {
@@ -18,7 +20,20 @@ export default function AddModal() {
         reader.onload = (readEvent) => {
           if (type == "image/jpeg" || type == "image/jpg" || type == "image/png" || type == "image/webp") {
             let thumb = readEvent.target?.result || ""
-            setThumbnail({thumbnail: thumb+""})
+            setPodcastThumbnail({thumbnail: thumb+""})
+          }
+        }
+    }
+    function displayPodcasterThumbnail(e: any) {
+        const reader = new FileReader()
+        let type = e.target.files[0].type
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0])
+        }
+        reader.onload = (readEvent) => {
+          if (type == "image/jpeg" || type == "image/jpg" || type == "image/png" || type == "image/webp") {
+            let thumb = readEvent.target?.result || ""
+            setPodcasterThumbnail({thumbnail: thumb+""})
           }
         }
     }
@@ -53,22 +68,77 @@ export default function AddModal() {
                 className="relative text-left text-white transition-all transform bg-black min-h-[260px]
                   rounded-lg shadow-xl w-[300px] sm:w-[500px] border-2 border-[#008BEE] px-3.5 py-2.5 space-y-2.5">
                 <div>
-                  <Dialog.Title className="font-semibold text-center h3 sm:h2 sm:text-start">Add New Podcast</Dialog.Title>
+                  <Dialog.Title className="font-semibold text-center h3 sm:h2 sm:text-start">Create New Podcast</Dialog.Title>
                 </div>
                 <div className='w-full space-y-1.5 sm:flex sm:space-y-0 sm:space-x-2.5 items-center'>
                   <div>
                     {
-                      thumbnail.thumbnail ? <img
-                        src={thumbnail.thumbnail}
+                      podcastThumbnail.thumbnail ? <img
+                        src={podcastThumbnail.thumbnail}
                         className="object-center w-full sm:w-[225px] h-40 cursor-pointer"
-                        onClick={() => setThumbnail({thumbnail: ""})}
+                        onClick={() => setPodcastThumbnail({thumbnail: ""})}
                       /> : (
                         <div className="flex flex-col items-center justify-center w-full sm:w-[225px] h-40 bg-black border-2 text-[#008BEE]
                             border-[#008BEE] hover:cursor-pointer rounded-xl"
-                            onClick={() => filePickerRef.current?.click()}>
+                            onClick={() => podcastFilePickerRef.current?.click()}>
                           <PhotographIcon className="w-10 h-10" />
                           <h4 className="text-lg font-semibold">Enter podcast thumbnail</h4>
-                          <input type="file" ref={filePickerRef} onChange={e => displayThumbnail(e)} hidden />
+                          <input type="file" ref={podcastFilePickerRef} onChange={e => displayPodcastThumbnail(e)} hidden />
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div className='w-full space-y-1.5'>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="podcast_name"
+                        className="w-full bg-transparent outline-none p-1.5 border-2 border-[#008BEE] rounded-lg text-sm"
+                      />
+                      <label
+                        htmlFor="podcast_name"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] 
+                          px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
+                          peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 
+                          peer-focus:-translate-y-4 left-1 bg-black">
+                        Podcast name
+                      </label>
+                    </div>
+                    <div className="relative">
+                      <textarea
+                        id="podcst_description"
+                        className="w-full bg-transparent outline-none p-1.5 border-2 border-[#008BEE] rounded-lg text-sm"
+                      />
+                      <label
+                        htmlFor="podcst_description"
+                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] 
+                          px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
+                          peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 
+                          peer-focus:-translate-y-4 left-1 bg-black">
+                        Podcast description
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className='flex items-center space-x-1.5'>
+                  <div className='w-full h-0.5 border border-white' />
+                  <p className='w-[200px] sm:w-[450px] text-center'>About Podcaster{"(s)"}</p>
+                  <div className='w-full border border-white h-0.5' />
+                </div>
+                <div className='w-full space-y-1.5 sm:flex sm:space-y-0 sm:space-x-2.5 items-center'>
+                  <div>
+                    {
+                      podcasterThumbnail.thumbnail ? <img
+                        src={podcasterThumbnail.thumbnail}
+                        className="object-center w-full sm:w-[225px] h-40 cursor-pointer"
+                        onClick={() => setPodcasterThumbnail({thumbnail: ""})}
+                      /> : (
+                        <div className="flex flex-col items-center justify-center w-full sm:w-[225px] h-40 bg-black border-2 text-[#008BEE]
+                            border-[#008BEE] hover:cursor-pointer rounded-xl"
+                            onClick={() => podcasterFilePickerRef.current?.click()}>
+                          <PhotographIcon className="w-10 h-10" />
+                          <h4 className="text-lg font-semibold px-1.5 text-center">Enter podcaster{"(s)"} thumbnail</h4>
+                          <input type="file" ref={podcasterFilePickerRef} onChange={e => displayPodcasterThumbnail(e)} hidden />
                         </div>
                       )
                     }
