@@ -2,15 +2,40 @@ import { PlayIcon, PauseIcon } from "@heroicons/react/outline"
 import { useState } from "react"
 import SideNav from "../../components/SideNav"
 import TopNav from "../../components/TopNav"
-import { Framework } from "@superfluid-finance/sdk-core"
-import { customHttpProvider } from "../../config";
+import { useSigner } from 'wagmi'
+
 
 export default function Podcast() {
 
     const [playing, setPlaying] = useState(false)
 
-    //where the Superfluid logic takes place
-    async function createNewFlow(recipient: any, flowRate: any) {
+    return(
+        <main className='relative md:flex bg-black h-screen scrollbar-thin scrollbar-thumb-[#008BEE] overflow-y-hidden'>
+            <div className='relative z-20'><SideNav page='categories' /></div>
+            <div className='flex-1 w-full max-h-screen md:pl-72'>
+              <div className='flex flex-col overflow-y-scroll scrollbar-none'>
+                <TopNav />
+              </div>
+            </div>
+            <div className="absolute bottom-0 w-full py-2 bg-black border-t-2 h-28 border-t-blue-500 md:pl-72">
+                <div className="flex items-center justify-center w-full h-full">
+                    <button onClick={async() => {
+                        if (playing) {
+                          setPlaying(false)
+                        }
+                        else {
+                          setPlaying(true)
+                        }
+                    }}>{playing ? <PauseIcon className="w-16 h-20 text-white" /> : <PlayIcon className="w-16 h-20 text-white" />}</button>
+                </div>
+            </div>
+        </main>
+    )
+}
+
+/**
+
+async function createNewFlow(recipient: any, flowRate: any) {
       const sf = await Framework.create({
         chainId: 5,
         provider: customHttpProvider
@@ -35,6 +60,8 @@ export default function Podcast() {
         });
     
         console.log("Creating your stream...");
+
+        console.log(signer)
     
         const result = await createFlowOperation.exec(signer);
         console.log(result);
@@ -44,7 +71,7 @@ export default function Podcast() {
         View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
         Network: Goerli
         Super Token: DAIx
-        Sender: 0xDCB45e4f6762C3D7C61a00e96Fb94ADb7Cf27721
+        Sender: ${signer.getAddress()}
         Receiver: ${recipient},
         FlowRate: ${flowRate}
         `
@@ -57,27 +84,63 @@ export default function Podcast() {
       }
     }
 
-    return(
-        <main className='relative md:flex bg-black min-h-screen scrollbar-thin scrollbar-thumb-[#008BEE]'>
-            <div className='relative z-20'><SideNav page='categories' /></div>
-            <div className='flex-1 w-full md:pl-72'>
-                <div className='flex flex-col overflow-y-scroll scrollbar-none'>
-                    <TopNav />
-                </div>
-            </div>
-            <div className="absolute bottom-0 w-full h-auto py-2 border-t-2 border-t-blue-500 md:pl-72">
-                <div className="flex items-center justify-center w-full h-full">
-                    <button onClick={async() => {
-                        await createNewFlow("0xaEc10C6768E492d3D20FC996cF514f113C3dB904","100000")
-                        if (playing) {
-                            setPlaying(false)
-                        }
-                        else {
-                            setPlaying(true)
-                        }
-                    }}>{playing ? <PauseIcon className="w-16 h-20 text-white" /> : <PlayIcon className="w-16 h-20 text-white" />}</button>
-                </div>
-            </div>
-        </main>
-    )
-}
+
+ */
+
+
+/*
+
+
+
+      const { ethereum } = window
+
+      if (ethereum && ethereum.request) {
+
+        const provider = new ethers.providers.Web3Provider(ethereum)
+        const signer =  provider.getSigner()
+
+        await ethereum.request({ method: "eth_accounts" });
+        const chainId = await ethereum.request({ method: "eth_chainId" });
+
+        const sf = await Framework.create({
+          chainId: Number(chainId),
+          provider: provider
+        });
+
+      const DAIxContract = await sf.loadSuperToken("fDAIx");
+      const DAIx = DAIxContract.address;
+
+      try {
+        const deleteFlowOperation = sf.cfaV1.deleteFlowByOperator({
+          sender: sender,
+          receiver: recipient,
+          superToken: DAIx
+          // userData?: string
+        });
+    
+        console.log("Deleting your stream...");
+    
+        const result = await deleteFlowOperation.exec(signer);
+        console.log(result);
+    
+        console.log(
+          `Congrats - you've just deleted your money stream!
+        View Your Stream At: https://app.superfluid.finance/dashboard/${recipient}
+        Network: Goerli
+        Super Token: DAIx
+        Sender: ${sender},
+        Receiver: ${recipient},
+        `
+        );
+      } catch (error) {
+        console.log(
+          "Hmmm, your transaction threw an error. Make sure that this stream does not already exist, and that you've entered a valid Ethereum address!"
+        );
+        console.error(error);
+      }
+
+      } else {
+        console.log("Please Install Metamask!!!");
+      }
+
+*/

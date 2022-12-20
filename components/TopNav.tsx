@@ -28,7 +28,9 @@ export default function TopNav() {
         <div className=" p-2.5 bg-blue w-10 h-10 rounded-full flex items-center hover:cursor-pointer">
             <Image src={"/bell.png"} width={25} height={25} />
         </div>
-        <div className="p-0.5 rounded-md ring-2 ring-blue"><ConnectButton chainStatus="icon" accountStatus="avatar" /></div>
+        <div className="p-0.5 rounded-md ring-2 ring-blue">
+          <ConnectButton chainStatus="icon" accountStatus={{smallScreen: 'avatar', largeScreen: 'full'}} showBalance={{smallScreen: false, largeScreen: true}} />
+        </div>
         <button className="hidden text-white sm:block md:hidden" onClick={toggleMenu}><MenuAlt3Icon  className="w-10 h-10" /></button>
       </div>
     </div>
