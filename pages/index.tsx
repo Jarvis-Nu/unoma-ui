@@ -18,59 +18,76 @@ const Home: NextPage = () => {
   const { data: signer } = useSigner()
   const { openConnectModal } = useConnectModal();
   const ref: any = useRef(null)
-  const [config, setConfig] = useState(null)
-
-  const { checkout } = useUnlock(config)
 
   const podcasts = [
     {
       id: 1,
       thumbnail: "/card1.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 2,
       thumbnail: "/card2.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 3,
       thumbnail: "/card1.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 4,
       thumbnail: "/card4.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 5,
       thumbnail: "/card5.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 6,
       thumbnail: "/card6.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 7,
       thumbnail: "/card7.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 8,
       thumbnail: "/card8.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 9,
       thumbnail: "/card7.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
     {
       id: 10,
       thumbnail: "/card8.png",
+      name: "Supreme podcast",
+      icon: "https://i.ibb.co/5FM9CZw/supremelogo.png",
       hex: "0xa1c6d1386a6458997ce908b8c3058cef44687c08"
     },
   ]
@@ -78,7 +95,7 @@ const Home: NextPage = () => {
   async function getStatus(config: any) {
     try {
       const getMembership = await getMemberships(config, await signer?.getAddress())
-      if (getMembership) {
+      if (getMembership.length > 0) {
         console.log(getMembership)
         return true
       }
@@ -114,17 +131,22 @@ const Home: NextPage = () => {
                     subconfig[`${podcast.hex}`] = {
                       network: 5
                     }
-                    config.title = "Subscribe to podcast"
+                    config.title = `Subscribe to ${podcast.name}`
+                    config.icon = podcast.icon
                     config.locks = subconfig
                     if (await signer?.getAddress()) {
                       ref.current?.continuousStart()
-                      setConfig(config)
                       if (await getStatus(config)) {
                         router.push("/podcasts/podcast")
                       }
                       else {
                         try {
-                          checkout()
+                          // checkout()
+                          let url = new URL("https://app.unlock-protocol.com/checkout")
+                          url.searchParams.set('paywallConfig', JSON.stringify(config))
+                          let redirectUri = new URL(window.location.href)
+                          url.searchParams.set('redirectUri', redirectUri.toString());
+                          router.push(url.toString())
                         } catch (error) {
                           console.log(error)
                         }
